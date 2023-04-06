@@ -1,0 +1,55 @@
+import type { NextApiRequest, NextApiResponse } from 'next';
+import axios from 'axios';
+import cheerio from 'cheerio';
+
+interface ScrapeData {
+  isAvaliable: Boolean;
+  isNext: Boolean;
+  error: Boolean;
+  errorMessage: String;
+  buildID: String;
+  sortedPages: string[];
+}
+interface ScrapeQuery {
+  url: String;
+}
+export default async function handler(
+  req: NextApiRequest<ScrapeQuery>,
+  res: NextApiResponse<ScrapeData>
+) {
+  if(!req.query.url) return res.json({
+    isNext: false,
+    error: true,
+    errorMessage: "Query Not Found"
+  })
+  try {
+    const response = await axios.get(req.query.url);
+    const $ = cheerio.load(response.data);
+
+     const scriptText = $('script#__NEXT_DATA__').html();
+   /* if(!scriptText) return res.json({
+      isNext: false,
+      avaliable: true
+    })*/
+    const nextData = JSON.parse(scriptText || '{}');
+
+     const buildID = nextData?.buildId || ''
+    const buildManifest = await axios.get(`${req.query.url}//_next/static/${buildID}/_buildManifest.js`)
+    const dManifest = buildManifest.data
+    const sortedText = /self\.__BUILD_MANIFEST=(.*),self\.__BUILD_MANIFEST_CB/.exec(dManifest)?.[1]; 
+    const parsedManifest = JSON.parse(sortedText || '[]');
+    res.status(200).json({
+      isNext: true,
+      avaliable: true,
+      buildID: buildID,
+      sortedPages: parsedManifest
+      
+    });
+  } catch (error) {
+    console.error(error);
+    res.status(200).json({
+      isNext: false,
+      avaliable: false
+    });
+  }
+}
