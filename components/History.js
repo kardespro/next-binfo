@@ -39,7 +39,7 @@ export default function History(){
       </div>
     </div>
       <div className="pt-12 grid grid-cols-2 gap-2">
-       <button className="flex space-x-2 py-3 px-5 rounded-xl bg-indigo-500 text-white" onClick={() => router.push("/")}>
+       <button className="flex space-x-2 py-3 px-5 rounded-xl bg-indigo-500 text-white" onClick={() => window.location.href = "/"}>
         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
   <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 12h-15m0 0l6.75 6.75M4.5 12l6.75-6.75" />
 </svg>
@@ -58,7 +58,7 @@ export default function History(){
       ):(
       <>
        <div className="pt-12"></div>
-      <div className="py-3 px-5 rounded-xl bg-white p-4">
+      <div className="py-3 px-5 rounded-xl bg-white p-4 transition-all duration-700 ease-in-out">
        <h1 className="text-center font-bold">History</h1>
     <div className="pt-12">
      <p className="text-red-500 text-center"> You Dont have History Yet</p>
