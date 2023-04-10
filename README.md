@@ -1,18 +1,42 @@
-# Next.js + TailwindCSS
+<center>
+  <img src="https://next-binfo.vercel.app/external/logo.png" style="width:188px;height:188px;display:center;" />
 
-Next.js Documentation: https://nextjs.org/docs<br>
-TailwindCSS Documentation: https://tailwindcss.com/docs/utility-first
+  </center>
+<center><h1 style="text-align:center;">Next-binfo</h1></center>
 
-Next.js: The React Framework
-for Production.
-Next.js gives you the best developer experience with all the features you need for production: hybrid static & server rendering, TypeScript support, smart bundling, route pre-fetching, and more. No config needed.
+<p style="color:#6366f1;font-family:bold;text-align:center;">Lookup Next.js Websites Fast And Easily</p>
 
-Tailwind is a utility-first CSS framework packed with classes like `flex`, `pt-4`, `text-center` and `rotate-90` that can be composed to build any design, directly in your markup.
+# <h3>Start To Deploying Next-binfo Website</h3>
 
-Example:
-```html
-<div className="bg-slate-800 text-xl p-2 border border-gray-100">
-  <p className="m-2 text-white">TailwindCSS and Next.js</p>
-  <a href="..." className="text-red-300">Visit the documentation</a>
-</div>
+```bash
+git clone https://github.com/kardespro/next-binfo
+cd next-binfo
 ```
+
+```bash
+npm i -y
+```
+
+<p>Start Server </p>
+
+```bash
+
+next build && next start
+
+```
+
+<h1>Contributors</h1>
+
+<table>
+  <tr>
+    <td align="center">
+      <a href="https://github.com/kardespro">
+        <img src="https://avatars.githubusercontent.com/u/61694826?v=4" width="100px;" alt=""/><br />
+        <sub><b>Nego</b></sub>
+      </a>
+      <br />
+      <a href="#" title="Code">👨‍💻</a> 
+      <a href="#" title="Design">🍥</a>
+    </td>
+    </tr>
+  </table>
