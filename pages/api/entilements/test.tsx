@@ -5,7 +5,7 @@ import loved from '../../../external/loved.json'
 import verified from '../../../external/verified.json'
 import dev from '../../../external/dev.json'
 import { addWebsite, Lookup , useConnection, useDisconnect } from '../../../external/database'
-import { makeid } from '../../../external/utils'
+import { makeid } from '../../../external/utils' 
 interface ScrapeData {
   isAvailable: boolean;
   error: boolean;
@@ -95,6 +95,11 @@ export default async function handler(
         
         }
         if(!styleHref){
+          let mk5 = makeid(12)
+          let mkdrty = {
+            url: req.query.url
+          }
+          addWebsite(mk5, mkdrty)
           res.json({
           isNext:true,
           isAvaliable: true,
@@ -105,7 +110,8 @@ export default async function handler(
           timeout: Date.now(),
           loved: loved.includes(req.query.url),
           verified: verified.includes(req.query.url),
-          dev: dev.includes(req.query.url)
+          dev: dev.includes(req.query.url),
+          share_id: mk5
         })
         }
         
