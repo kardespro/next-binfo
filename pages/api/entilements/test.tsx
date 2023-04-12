@@ -4,6 +4,8 @@ import cheerio from 'cheerio';
 import loved from '../../../external/loved.json'
 import verified from '../../../external/verified.json'
 import dev from '../../../external/dev.json'
+import { addWebsite, Lookup , useConnection, useDisconnect } from '../../../external/database'
+import { makeid } from '../../../external/utils'
 interface ScrapeData {
   isAvailable: boolean;
   error: boolean;
@@ -15,6 +17,7 @@ interface ScrapeData {
   loved: boolean;
   verified: boolean;
   dev: boolean;
+  share_id: string;
 }
 
 interface ScrapeQuery {
@@ -30,6 +33,7 @@ export default async function handler(
     error: true,
     errorMessage: "Query Not Found"
   })
+  //await useConnection()
   let response = await axios.get(req.query.url, {proxy: { protocol: "http", host: "188.74.210.207", port: 6286, auth: { username: "mgsivsqa", password: "db1i98i8t4h3"}}}).catch(err => res.json({
     isNext: false,
     isAvaliable: false,
@@ -68,7 +72,11 @@ export default async function handler(
         axios.get(fullStyleUrl,{proxy: { protocol: "http", host: "188.74.210.207", port: 6286, auth: { username: "mgsivsqa", password: "db1i98i8t4h3"}}}).then(w4w1 => {
           
   const hasTailwind = /\/\*[\s\S]*tailwindcss[\s\S]*\*\//.test(w4w1.data);
-          
+          let mk5 = makeid(12)
+          let mkdrty = {
+            url: req.query.url
+          }
+          addWebsite(mk5, mkdrty)
           res.json({
           isNext:true,
           isAvaliable: true,
@@ -79,7 +87,8 @@ export default async function handler(
           timeout: Date.now(),
           loved: loved.includes(req.query.url),
           verified: verified.includes(req.query.url),
-          dev: dev.includes(req.query.url)
+          dev: dev.includes(req.query.url),
+          share_id: mk5
         })
         })
   
@@ -102,7 +111,7 @@ export default async function handler(
         
       }
     });
-
+    //await useDisconnect()
     // __NEXT_DATA__ verisi yoksa hata fırlat
     if (!$('#__NEXT_DATA__').length) {
       res.json({
