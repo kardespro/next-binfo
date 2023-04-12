@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useRouter } from 'next/router'
 export default function History(){
   const [log,setLog] = useState({})
+  const [s,t] = useState("")
   const [sa,ssa] = useState(true)
   const router = useRouter()
   useEffect(() => {
@@ -10,6 +11,11 @@ export default function History(){
       ssa(false)
     }
     let d = JSON.parse(data)
+
+    
+  /*  let dd = d.title || "Title Not Found"
+    let ddd = dd.slice(0, 24) + "...";
+    t(ddd)*/
     setLog(d)
   })
   function remove(){
@@ -26,7 +32,7 @@ export default function History(){
     <h1 className="text-center font-bold">History</h1>
       <div className="pt-6 flex space-x-2">
        <img src={log.faviconUrl || ""} className="rounded-xl bg-indigo-500 w-16 h-16" />
-        <p className="pt-4 pl-12 font-bold">{log.title || ""}</p>
+        <p className="pt-4 pl-12 font-bold">{log.title  || ""}</p>
         
       
       </div>

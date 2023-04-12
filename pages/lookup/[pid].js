@@ -1,76 +1,38 @@
-import axios from 'axios'
-import { useState, useEffect } from 'react'
-import useSWR from 'swr'
-import MoonLoader from "react-spinners/ClipLoader"; 
-import ShareModal from './ShareModal.js'
 import { useRouter } from 'next/router'
-export default function Search(){
-   const router = useRouter()
-   const [favourite,setFavourite] = useState([])
-   const [shr,setShr] = useState(false)
-   const [search,setSearch] = useState()
-   const [sAble,ssAble] = useState(false)
-   const [loadBtn,setLoadBtn] = useState(false)
-   const [ping,setPing] = useState("")
-   const handleSubmit = async(e) => {
-     e.preventDefault()
-     setLoadBtn(true)
-     let d = await axios.get(`/api/entilements/test?url=${e.target.url.value}`, { headers: { "Content-Type": "application/json"}})
-     let p = {
-       url: e.target.url.value,
-       title: d.data.title,
-       faviconUrl: d.data.faviconUrl
-     }
-     let pingg = d.data.timeout - Date.now()
-     
-     let p2 = JSON.stringify(p)
-     window.localStorage.setItem("__history", p2)
-     
-     setSearch(d.data)
-     setPing(pingg)
-     setLoadBtn(false)
-       ssAble(true)
-    /* setTimeout(() => {
-      setLoadBtn(false)
-      ssAble(true)
+import axios from 'axios'
+import { useState , useEffect } from 'react'
+export default function LookupData(){
+  
+  const [search,setSearch] = useState({})
+  const [ping,setPing] = useState("")
+  const router = useRouter() 
+  const { pid } = router.query 
+
+  useEffect(() => {
+    (async() => {
+    let data = await axios.get(`/api/entilements/lookup?id=${pid}`)
+    if(data.data.errorCode === 404){
       
-     }, 2000)*/
-   }
+      setSearch(null)
+    }
+    if(!data.data.error){
+      setSearch(data.data)
+      
+    }
+    })()
+  })
   return(
     <>
-    <div className="p-4 flex mb-1.5 bg-white shadow rounded-xl">
-     <form onSubmit={handleSubmit}>
-      <div className="flex space-x-2">
-      <input 
-        name="url"
-        className="bg-white py-3 px-5 rounded-xl border-2 border-indigo-500 hover:border-2 hover:border-indigo-500 focus:border-2 focus:border-indigo-500"
-        type="url"
-        placeholder="https://example.com"
-        required
-        />
-        {loadBtn ?(
-          <button type="submit" className="bg-indigo-500 py-3 px-5 rounded-xl text-white hover:bg-indigo-500" disabled>
-      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6 animate-spin text-gray-50">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182m0-4.991v4.99" />
-</svg>
-
-            
-</button>
-          ):(
-            <button type="submit" className="bg-indigo-500 py-3 px-5 rounded-xl text-white hover:bg-indigo-500"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-  <path strokeLinecap="round" strokeLinejoin="round" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-</svg>
-</button>
-        )}
-      </div>
-       
-     </form>
-    </div>
-      {sAble ?(
-       <div className="pt-12">
+      {!search && 
+      <div className="pt-24"></div>
+      }
+      {search ?(
+        <div className="pt-12">
    <div className="p-4 py-3 px-5 bg-white mb-1.5 rounded-xl duration-300">
      <h1 className="font-bold text-center">Results</h1>
-     <p className="text-left font-bold text-xs pt-6">Badges : </p>
+
+
+         <p className="text-left font-bold text-xs pt-6">Badges : </p>
     <p className="flex space-x-3">
       {search.verified ?(
          <span>
@@ -146,14 +108,7 @@ export default function Search(){
 
          </p>
            )}
-     {search.isNext ?(
-         <>
-        <p className="text-left font-bold text-xs pt-4">Timeout : </p>
-        <p className="text-indigo-500 font-bold text-xs">{`${ping}`} ms</p>
-         </>
-         ):(
-         <p></p>
-     )}
+    
      {search.isNext ? (
          <>
      <p className="text-left font-bold text-xs pt-4">Header</p>
@@ -165,39 +120,15 @@ export default function Search(){
          ):(
          <p></p>
      )}
-  </div>
-   </div>
-      ):(
-       <div className="pt-12">
-   <div className="p-4 py-3 px-5 bg-white mb-1.5 rounded-xl">
-    <div className="pt-12 text-center text-xs">
-   
-    <p className="font-bold">You Dont Have Search Yet</p>
-      <p className="text-center text-xs text-blue-600">Visit <button onClick={() => router.push("/history")}>History</button></p>
-    </div>
-     <div className="pt-12"></div>
-  </div>
-   </div>
-      
-      )}
-      {sAble ?(
-      <div className="pt-2 space-x-2 gap-1.5  h-6">
-      <button className="text-white bg-red-500 py-5 px-3 rounded-xl w-64 h-18 text-center" onClick={() => ssAble(false)}>
-      Reset
-      </button>
-        <button className="text-white bg-indigo-500 py-5 px-3 rounded-xl w-24 h-18" onClick={() => setShr(true)}>
-      Share
 
-        </button>
-         {shr &&
-      
-       <ShareModal id={search.share_id} />
-         }
-        </div>
+     
+   </div>
+          </div>
       ):(
-      <p></p>
+        <div className=" p-4 mb-1.5 bg-white shadow rounded-xl">
+        <h1 className="text-red-600 text-center font-bold text-xl">This ID Not found in Database</h1>
+       </div>
       )}
-      
-    </>
+      </>
   )
 }
