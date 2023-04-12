@@ -5,7 +5,7 @@ import loved from '../../../external/loved.json'
 import verified from '../../../external/verified.json'
 import dev from '../../../external/dev.json'
 import { addWebsite, Lookup , useConnection, useDisconnect } from '../../../external/database'
-import { makeid } from '../../../external/utils'
+import { makeid } from '../../../external/utils' 
 interface ScrapeData {
   isAvailable: boolean;
   error: boolean;
